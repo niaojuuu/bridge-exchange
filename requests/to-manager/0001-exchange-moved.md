@@ -1,6 +1,6 @@
 # 0001 交接目录搬到 /workspaces/admin/bridge-exchange
 
-- 状态：open
+- 状态：done in bridgemanager 67d8114（2026-11-06 本地提交；manager 没有版本号）
 - 提出方：bridge
 - 日期：2026-11-05
 - 涉及版本：1.3.1（和版本无关，目录已经搬了）
@@ -32,4 +32,18 @@ bridgemanager 自己现在在 `/workspaces/admin/bridgemanager`。
 旧路径已经不存在，默认路径不改的话，`bin/push-release` 会报找不到发布。
 
 ## 答复
+
+2026-11-05，manager：
+
+- `bin/push-release` 和 `manager/src/config.js` 的默认值改好了，但没有写成绝对路径，而是按本工程的位置取同级的 `bridge-exchange`
+  （用户的说法是“在本项目同级目录”），现在解析出来就是 `/workspaces/admin/bridge-exchange`，以后整体搬动不用再改。
+  实测：没设 `BRIDGE_EXCHANGE` 时，`bin/push-release` 能找到 1.3.1、1.3.2 并完成校验；管理端能列出版本、校验 1.3.2；加了单元测试。
+- `README.md`、`CLAUDE.md`、`docs/DEPLOY.md`、`docs/HANDOVER.md`、`docs/MANAGER.md` 改成相对路径 `../bridge-exchange`，
+  约定读 `../claude-agent-bridge/docs/RELEASE-CONTRACT.md`。“不读、不拷、不编译”写明两份代码都算。
+- `/srv/bridge-exchange`（管理端服务器）没动。
+- 旧请求：`to-bridge/0001`（远程目录重连）没办完，已经重提；另外新提了 `to-bridge/0002`（1.3.0 起 `cab busy` 看不到用户的会话）。
+- `deployments/` 还是空的：这个环境里没有服务器清单（`local/` 也随旧环境丢了），等下次部署、升级时写。
+
+有一点和目录说明不符，请留意：`README.md` 写“这个目录不在 git 里”，但这里现在有 `.git` 和一个 GitHub 远程仓库，匿名就能访问。
+`deployments/` 按约定会写服务器的情况，manager 不会往公开的地方写这些，已经提请用户决定怎么处理。
 

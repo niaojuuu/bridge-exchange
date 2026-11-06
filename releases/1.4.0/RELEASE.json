@@ -1,0 +1,75 @@
+{
+  "name": "claude-agent-bridge",
+  "version": "1.4.0",
+  "commit": "2b27791df18b217cd5b8b2fce1462a68c2f959ce",
+  "tag": "v1.4.0",
+  "dirty": false,
+  "built_at": "2026-11-06T08:44:18.606Z",
+  "artifact": {
+    "file": "claude-agent-bridge-1.4.0.tgz",
+    "sha256": "027c5b835c2df0f8dd588c06392785f4633df90ad3d42213b7d6679ec2f468a9"
+  },
+  "runtime": {
+    "node": ">=24",
+    "install": "npm ci --omit=dev on the target machine (the SDK installs the Claude Code binary for that platform)",
+    "start": "scripts/serve.sh",
+    "stop": "SIGTERM",
+    "run_as_root": false
+  },
+  "agent_sdk": "0.3.316",
+  "claude_code": "2.1.316",
+  "service": {
+    "bind": "127.0.0.1",
+    "port_env": "BRIDGE_PORT",
+    "default_port": 7788,
+    "health": "/health"
+  },
+  "data": {
+    "home_env": "BRIDGE_HOME",
+    "default_home": "~/.claude-agent-bridge",
+    "files": [
+      "token",
+      "env",
+      "config.json",
+      "guardrails.json",
+      "users.json",
+      "accounts.json",
+      "mail.json",
+      "bridge.db",
+      "uploads/",
+      "logs/"
+    ],
+    "database": {
+      "journal_mode": "wal",
+      "backup": "sqlite3 bridge.db \".backup <file>\" while running, or stop the service and copy bridge.db* together"
+    },
+    "claude_logins": [
+      "~/.claude",
+      "~/.claude<N>"
+    ]
+  },
+  "system_deps": {
+    "required": [
+      "git",
+      "curl"
+    ],
+    "recommended": {
+      "ps (procps)": "detects sessions still open in a terminal before taking them over",
+      "user sandbox (Linux)": [
+        "bubblewrap",
+        "socat",
+        "unprivileged user namespaces"
+      ],
+      "remote directories (Linux)": [
+        "/dev/fuse",
+        "fusermount3 (setuid root)",
+        "sshfs >= 3.7.6"
+      ]
+    },
+    "sshfs": {
+      "min_version": "3.7.6",
+      "source": "https://github.com/libfuse/sshfs/releases/download/sshfs-3.7.6/sshfs-3.7.6.tar.xz",
+      "source_sha256": "6a1bcb31450a077e9cb1b7ff158c71de34db697c3c0da6cb362502131e495893"
+    }
+  }
+}
